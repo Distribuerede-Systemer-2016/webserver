@@ -20,6 +20,7 @@ public class ResponseHandler implements Runnable {
 
     try {
       System.out.println("Connection!");
+      System.out.println("Thread count: " + Thread.activeCount());
 
       //Read from input stream (from client)
       BufferedReader inFromClient = new BufferedReader(new InputStreamReader(this.remoteSocket.getInputStream()));
