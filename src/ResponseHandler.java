@@ -1,12 +1,12 @@
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
 
-/**
- * Created by jesperbruun on 20/09/2016.
- */
 public class ResponseHandler implements Runnable {
 
   private Socket remoteSocket;
@@ -43,17 +43,29 @@ public class ResponseHandler implements Runnable {
       outToClient.writeBytes("Server: Hackerbot\n");
       outToClient.writeBytes("\n");
 
-      Thread.sleep(1000);
+      User user1 = new User();
+      user1.setName("Luke Skywalker");
+      user1.setAge(18);
 
-      outToClient.writeBytes("{\"hello\":\"world\"}");
+      User user2 = new User();
+      user2.setName("Lea");
+      user2.setAge(19);
+
+      ArrayList<User> users = new ArrayList<>();
+      users.add(user1);
+      users.add(user2);
+
+      Gson gson = new Gson();
+      String jsonUsers = gson.toJson(users);
+
+
+      outToClient.writeBytes(jsonUsers);
 
       //Flush'n'close
       outToClient.flush();
 
       outToClient.close();
       this.remoteSocket.close();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
