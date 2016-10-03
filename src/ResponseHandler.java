@@ -1,9 +1,6 @@
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -34,14 +31,14 @@ public class ResponseHandler implements Runnable {
 
 
       //Create output stream (to client)
-      DataOutputStream outToClient = new DataOutputStream(this.remoteSocket.getOutputStream());
+      PrintWriter outToClient = new PrintWriter(remoteSocket.getOutputStream());
 
 
       //Write response headers
-      outToClient.writeBytes("HTTP/1.0 200 OK\n");
-      outToClient.writeBytes("Content-Type: application/json\n");
-      outToClient.writeBytes("Server: Hackerbot\n");
-      outToClient.writeBytes("\n");
+      outToClient.println("HTTP/1.0 200 OK");
+      outToClient.println("Content-Type: application/json");
+      outToClient.println("Server: Hackerbot");
+      outToClient.println("");
 
       User user1 = new User();
       user1.setName("Luke Skywalker");
@@ -58,8 +55,7 @@ public class ResponseHandler implements Runnable {
       Gson gson = new Gson();
       String jsonUsers = gson.toJson(users);
 
-
-      outToClient.writeBytes(jsonUsers);
+      outToClient.println(jsonUsers);
 
       //Flush'n'close
       outToClient.flush();
